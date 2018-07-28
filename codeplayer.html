@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> CodePlayer </title>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+    <style>
+        
+        #container {
+        
+        width:100%;
+        height: 50px;
+        background-color: #D3D3D3;
+            margin-bottom: 0px;
+        }
+      
+        .toggleButtons{
+        margin-top: 12px;
+        font-family: sans-serif;
+        font-size: 100%;
+        border:grey solid 1px;
+        padding: 5px;
+        font-weight: bold;
+        float: left;
+           
+         
+                }
+       
+                
+        #logo{
+            font-family: sans-serif;
+            font-weight: bold;
+            float: left;
+            padding:15px;
+            font-size: 125%
+        }
+        
+        body {
+            margin-top: 0px;
+            margin-left: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+        }
+        
+        #menuButtons{
+            width:400px;
+            margin: 0 auto;
+        }
+        
+        #html{
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+        
+        #output {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .toggleHover {
+            background-color: grey;
+        }
+        
+         .active{
+            background-color: azure;
+        }
+        
+       
+        .active:hover{
+            
+            background-color: grey;
+        }
+        .panel{
+           float:left;
+            width:50%;
+            
+        }
+        
+        
+        
+        iframe {
+            margin:none;
+            padding: none;
+            
+            border:none;
+        }
+        
+        #bodyContainer{
+            float:left;
+            width:100%;
+            margin-top: 0px;
+            padding-top: 0px;;
+            
+        }
+        
+        textarea {
+            resize: none;
+            padding: 0px;
+            margin: 0px;
+            
+        }
+        
+        .clear{
+            
+            clear:both;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        
+    </style>
+</head>
+
+    <body>
+    <div id = "container">
+            <div id="logo">CodePlayer</div>
+            <div id ="menuButtons" >
+                <div id ="html" class="toggleButtons">HTML</div>
+                <div id ="css" class="toggleButtons">CSS</div>
+                <div id ="javascript" class="toggleButtons">JavaScript</div>
+                <div id ="output" class="toggleButtons">Output</div>
+    
+            </div>
+    </div>
+        
+    <div class="clear"></div>
+        
+    <div id ="bodyContainer">
+        
+        <textarea id="htmlPanel" class="panel"><p id ="paragraph">Hi</p></textarea> 
+        <textarea id="cssPanel" class="panel hidden">
+            p { 
+            font-size: 25px;
+            color: green;
+            }
+        </textarea> 
+        <textarea id="javascriptPanel" class="panel hidden">document.getElementById("paragraph").innerHTML = "Hello Raja";</textarea> 
+        <iframe id="outputPanel" class="panel"></iframe>
+    </div>
+      
+        <script type=text/javascript>
+            $(document).ready(function(){
+             $("#html").addClass("active");
+            $("#output").addClass("active");
+                
+            });
+            
+        $(".toggleButtons").hover(function(){
+           $(this).toggleClass("toggleHover");
+         
+                    });
+        $(".toggleButtons").click(function(){
+            
+            $(this).toggleClass("active");
+            var panelId = $(this).attr("id") + "Panel";
+            $("#" + panelId).toggleClass("hidden");
+            var numberOfActivePanels = 4 - $(".hidden").length;
+            $(".panel").width(($(window).width() / numberOfActivePanels) -5);
+            
+        });
+        
+        $(".panel").height($(window).height() - $("#container").height());
+       
+        updateIframe();
+            
+        $("textarea").on('change keyup paste', function() {
+        updateIframe();
+        });
+            
+        function updateIframe(){
+        $("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssPanel").val() + "</style></head><body>" + $("#htmlPanel").val() + "</body> </html>");
+            
+        //Update Javascript in iframe
+        document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val());
+    }    
+        </script>
+    </body>
+
+
+
+</html>
